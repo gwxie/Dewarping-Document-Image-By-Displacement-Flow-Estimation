@@ -14,7 +14,7 @@ from torch.utils import data
 def getDatasets(dir):
 	return os.listdir(dir)
 
-def resize_data(origin_img):
+def resize_image(origin_img):
 	# long_edge, short_edge = 2048, 1920
 	long_edge, short_edge = 1024, 960
 	# long_edge, short_edge = 512, 480
@@ -98,7 +98,7 @@ class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 
 			im = cv2.imread(im_path, flags=cv2.IMREAD_COLOR)
 
-			# im = resize_data(im)
+			im = resize_image(im)
 			im = self.transform_im(im)
 
 			if self.is_return_img_name:
