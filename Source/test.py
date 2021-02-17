@@ -29,9 +29,9 @@ def train(args):
     # Setup Dataloader
 
     data_split = 'data1024_greyV2'
-    data_path = '/lustre/home/gwxie/data/unwarp_new/train/'
-    data_path_validate = '/lustre/home/gwxie/data/unwarp_new/train/'+data_split+'/'
-    data_path_test = '/lustre/home/gwxie/data/unwarp_new/test/'
+    data_path = './dataset/unwarp_new/train/'
+    data_path_validate = './dataset/unwarp_new/train/'+data_split+'/'
+    data_path_test = './dataset/'
 
     test_shrink_sub_dir = 'shrink_1024_960/crop/'
 
