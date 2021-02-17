@@ -12,9 +12,9 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 
 
 # Release Code
-1、Download model parameter
-2、Resize the input image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
-3、Run "python test.py"
+1、Download model parameter  
+2、Resize the input image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )  
+3、Run "python test.py"  
 
 
 # The complete code will be released soon.
