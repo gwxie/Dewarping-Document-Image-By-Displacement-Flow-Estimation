@@ -568,29 +568,28 @@ class FlatImg(object):
                 for i_valloader, valloader in enumerate(self.testloaderSet.values()):
 
                     for i_val, (images_val, im_name) in enumerate(valloader):
-                        try:
-                            # save_img_ = True
-                            save_img_ = random.choices([True, False], weights=[1, 0])[0]
-                            # save_img_ = random.choices([True, False], weights=[0.2, 0.8])[0]
+                        # try:
+                        save_img_ = random.choices([True, False], weights=[1, 0])[0]
+                        # save_img_ = random.choices([True, False], weights=[0.2, 0.8])[0]
 
-                            if save_img_:
-                                images_val = Variable(images_val.cuda(self.args.gpu))
+                        if save_img_:
+                            images_val = Variable(images_val.cuda(self.args.gpu))
 
-                                outputs, outputs_classify = self.model(images_val)
-                                outputs_classify = outputs_classify.squeeze(1)
-                                # outputs, outputs_classify = self.model(images_val, is_softmax=True)
+                            outputs, outputs_classify = self.model(images_val)
+                            outputs_classify = outputs_classify.squeeze(1)
+                            # outputs, outputs_classify = self.model(images_val, is_softmax=True)
 
-                                pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
-                                # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
-                                pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
-                                # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
+                            pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
+                            # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
+                            pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
+                            # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
 
-                                self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress,
-                                                                                          pred_classify, im_name,
-                                                                                          epoch + 1,
-                                                                                          scheme='test', is_scaling=is_scaling)
-                        except:
-                            print('* save image tested error :' + im_name[0])
+                            self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress,
+                                                                                      pred_classify, im_name,
+                                                                                      epoch + 1,
+                                                                                      scheme='test', is_scaling=is_scaling)
+                        # except:
+                        #     print('* save image tested error :' + im_name[0])
 
                 test_time = time.time() - begin_test
 
