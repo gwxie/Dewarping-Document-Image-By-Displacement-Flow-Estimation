@@ -15,7 +15,6 @@ from . import utils as utils
 
 from xgw.projects.flat.data.perturbed_dataset import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
 
-
 def train(args):
     global _re_date
     if args.resume is not None:
@@ -100,7 +99,8 @@ def train(args):
     # trainloader = data.DataLoader(train_loader, batch_size=args.batch_size, num_workers=args.batch_size//2, shuffle=True)
 
     # trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
-    FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
+    # FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
+    FlatImg.loadTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
 
 
     train_time = AverageMeter()
