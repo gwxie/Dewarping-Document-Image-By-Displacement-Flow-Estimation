@@ -575,9 +575,8 @@ class FlatImg(object):
                         if save_img_:
                             images_val = Variable(images_val.cuda(self.args.gpu))
 
-                            outputs, outputs_classify = self.model(images_val)
+                            outputs, outputs_classify = self.model(images_val, is_softmax=True)
                             outputs_classify = outputs_classify.squeeze(1)
-                            # outputs, outputs_classify = self.model(images_val, is_softmax=True)
 
                             pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
                             # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
