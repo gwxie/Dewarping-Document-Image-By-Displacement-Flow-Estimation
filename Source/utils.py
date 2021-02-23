@@ -416,6 +416,19 @@ class FlatImg(object):
         self.t_loaderSet = t_loaderSet
         # return v_loaderSet, valloaderSet
 
+    def loadTestData(self, is_shuffle=True, sub_dir='shrink_512/crop/'):
+
+
+        t1_loader = self.data_loader(self.data_path_test+sub_dir, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
+        testloader1 = data.DataLoader(t1_loader, batch_size=self.args.batch_size, num_workers=self.args.batch_size, pin_memory=True, \
+                                       shuffle=False)
+
+        '''test sets'''
+        testloaderSet = {
+            'testloader1': testloader1,
+        }
+
+        self.testloaderSet = testloaderSet
 
     def saveModel_epoch(self, epoch):
         epoch += 1
@@ -558,7 +571,7 @@ class FlatImg(object):
                     for i_val, (images_val, im_name) in enumerate(valloader):
                         try:
                             # save_img_ = True
-                            save_img_ = random.choices([True, False], weights=[0.4, 0.6])[0]
+                            save_img_ = random.choices([True, False], weights=[1, 0])[0]
                             # save_img_ = random.choices([True, False], weights=[0.2, 0.8])[0]
 
                             if save_img_:
