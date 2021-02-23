@@ -98,7 +98,7 @@ class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 
 			im = cv2.imread(im_path, flags=cv2.IMREAD_COLOR)
 
-			im = resize_image(im)
+			# im = resize_image(im)
 			im = self.transform_im(im)
 
 			if self.is_return_img_name:
