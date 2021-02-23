@@ -462,7 +462,7 @@ class FlatImg(object):
 
                         images_val = Variable(images_val.cuda(self.args.gpu))
 
-                        outputs, outputs_classify = self.model(images_val)
+                        outputs, outputs_classify = self.model(images_val, is_softmax=True)
                         outputs_classify = outputs_classify.squeeze(1)
                         # outputs, outputs_classify = self.model(images_val, is_softmax=True)
 
@@ -613,7 +613,7 @@ class FlatImg(object):
                         if im_name[0] in index:
                             images_val = Variable(images_val.cuda(self.args.gpu))
 
-                            outputs, outputs_classify = self.model(images_val)
+                            outputs, outputs_classify = self.model(images_val, is_softmax=True)
                             outputs_classify = outputs_classify.squeeze(1)
                             # outputs, outputs_classify = self.model(images_val, is_softmax=True)
 
