@@ -13,7 +13,7 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 
 
 # Notice
-2020.11.10 update the result file, such as 6-25_11_52_54-49-rgb_ and 6-25_11_52_54-49_.
+2020.11.10 update the result file, including 6-25_11_52_54-49-rgb_ and 6-25_11_52_54-49_.
 
 2022.2.17 update the Release Code.
 
