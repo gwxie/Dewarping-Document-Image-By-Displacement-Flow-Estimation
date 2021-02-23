@@ -180,7 +180,7 @@ if __name__ == '__main__':
     parser.add_argument('--print-freq', '-p', default=320, type=int,
                         metavar='N', help='print frequency (default: 10)')  # print frequency
 
-    parser.add_argument('--output-path', default='/lustre/home/gwxie/project/result/flat/', type=str,
+    parser.add_argument('--output-path', default='./flat/', type=str,
                         help='the path is used to  save output --img or result.')  # GPU id ---choose the GPU id that will be used
 
     parser.add_argument('--batch_size', nargs='?', type=int, default=6,
