@@ -10,10 +10,10 @@ import torch
 import re
 
 import warnings
-from .network import ResnetDilatedRgressAndClassifyV2v6v4c1GN
-from . import utils as utils
+from network import ResnetDilatedRgressAndClassifyV2v6v4c1GN
+import utils as utils
 
-from xgw.projects.flat.data.perturbed_dataset import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
+from perturbed_dataset import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
 
 def train(args):
     global _re_date
@@ -28,9 +28,9 @@ def train(args):
     # Setup Dataloader
 
     data_split = 'data1024_greyV2'
-    data_path = './dataset/unwarp_new/train/'
-    data_path_validate = './dataset/unwarp_new/train/'+data_split+'/'
-    data_path_test = './dataset/'
+    data_path = '/dataset/unwarp_new/train/'
+    data_path_validate = '/dataset/unwarp_new/train/'+data_split+'/'
+    data_path_test = '/dataset/'
 
     test_shrink_sub_dir = 'shrink_1024_960/crop/'
 
@@ -186,10 +186,10 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', nargs='?', type=int, default=6,
                         help='Batch Size')#16
 
-    parser.add_argument('--schema', type=str, default='eval',
+    parser.add_argument('--schema', type=str, default='test',
                         help='train or test')
 
-    parser.set_defaults(resume='./2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
+    parser.set_defaults(resume='/2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
 
     parser.add_argument('--parallel', default='3', type=list,
                         help='choice the gpu id for parallel ')
