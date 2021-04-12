@@ -44,7 +44,7 @@ def resize_image(origin_img):
 		im_ud = img_shrink
 		origin_img = cv2.resize(origin_img, (im_ud, im_lr), interpolation=cv2.INTER_CUBIC)
 		new_img[(new_shape[0] - im_lr) // 2:new_shape[0] - (new_shape[0] - im_lr) // 2, :] = origin_img
-		return new_img
+	return new_img
 
 class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 	def __init__(self, root, split='1-1', img_shrink=None, is_return_img_name=False, preproccess=False):
