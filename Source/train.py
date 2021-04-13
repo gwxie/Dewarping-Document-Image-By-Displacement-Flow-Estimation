@@ -125,21 +125,9 @@ def train(args):
                 optimizer.param_groups[0]['lr'] = 0.05 * args.l_rate
             elif epoch >= 40:
                 optimizer.param_groups[0]['lr'] = 0.01 * args.l_rate
-            #
-            # if epoch >= 20 and epoch < 40:
-            #     optimizer.param_groups[0]['lr'] = 0.1 * args.l_rate
-            # elif epoch >= 40:
-            #     optimizer.param_groups[0]['lr'] = 0.01 * args.l_rate
 
             print('* lambda_loss :'+str(FlatImg.lambda_loss)+'\t'+'learning_rate :'+str(optimizer.param_groups[0]['lr']))
             print('* lambda_loss :'+str(FlatImg.lambda_loss)+'\t'+'learning_rate :'+str(optimizer.param_groups[0]['lr']), file=reslut_file)
-
-            # if epoch <= 10:
-            #     torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
-            # elif epoch > 10 and epoch <= 40:
-            #     torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-            # elif epoch <= 300:
-            #     torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
 
             begin_train = time.time()
             loss_classify_list = []
@@ -161,11 +149,9 @@ def train(args):
                 outputs_classify = outputs_classify.squeeze(1)
 
                 loss_l1, loss_local, loss_CS = loss_fun(outputs, labels, outputs_classify, labels_classify, size_average=False)
-                # loss_overall, loss_local, loss_l1 = loss_fun(outputs, labels, labels_classify, size_average=True)
                 loss_regress = loss_l1 + loss_local + loss_CS
                 loss_classify = loss_classify_fun(outputs_classify, labels_classify)
-                # loss_classify = F.cross_entropy(outputs_classify, labels_classify)
-                # loss_classify = F.nll_loss(torch.log(outputs_classify), labels_classify)
+
                 loss = FlatImg.lambda_loss*loss_regress + FlatImg.lambda_loss_classify*loss_classify
 
                 losses.update(loss.item())
@@ -208,13 +194,6 @@ def train(args):
                     del loss_local_list[:]
             FlatImg.saveModel_epoch(epoch)      # FlatImg.saveModel(epoch, save_path=path)
 
-            '''
-            if epoch > 10:
-                if losses_classify.avg < 0.01 and FlatImg.lambda_loss == 0.1:
-                    FlatImg.lambda_loss = 0.01
-                elif losses_classify.avg < 0.001 and FlatImg.lambda_loss == 0.01:
-                    FlatImg.lambda_loss = 0.001
-            '''
             model.eval()
             # FlatImg.testModelV2GreyC1_index(epoch, train_time, ['36_2 copy.png', '17_1 copy.png'])
             # exit()
@@ -228,13 +207,8 @@ def train(args):
             try:
                 FlatImg.validateOrTestModelV2GreyC1(epoch, trian_t, validate_test='v_l3v3')
                 FlatImg.validateOrTestModelV2GreyC1(epoch, 0, validate_test='t')
-                FlatImg.testModelV2GreyC1_index(epoch, train_time, ['2_2 copy.png', '36_2 copy.png', '17_1 copy.png', '22_2 copy.png', '29_2 copy.png'])
             except:
                 print(' Error: validate or test')
-            #
-            # FlatImg.validateModelV2Grey(epoch, trian_t)
-            # FlatImg.testModelV2Grey(epoch, train_time)
-            # FlatImg.testModelV2Grey_index(epoch, train_time, '36_2 copy.png')
 
             print('\n')
     elif args.schema == 'test':
