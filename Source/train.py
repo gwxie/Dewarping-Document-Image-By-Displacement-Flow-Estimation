@@ -110,6 +110,10 @@ def train(args):
 
 
     train_time = AverageMeter()
+    losses = AverageMeter()
+    FlatImg.lambda_loss = 0.1
+    FlatImg.lambda_loss_classify = 1
+    
     
     if args.schema == 'train':
         trainloader = FlatImg.loadTrainDataHDF5(data_split=data_split, is_shuffle=True)
