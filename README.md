@@ -13,11 +13,11 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 
 
 # Notice
-2020.11.10 update the result file, including 6-25_11_52_54-49-rgb_ and 6-25_11_52_54-49_.
+- 2020.11.10 update the result file, including 6-25_11_52_54-49-rgb_ and 6-25_11_52_54-49_.
 
-2022.2.17 update the Release Code.
+- 2022.2.17 update the Release Code.
 
-2022.4.14 update Source file.
+- 2022.4.14 update Source file.
 
 
 # Release Code
@@ -33,6 +33,10 @@ Please send an email to xieguowang2018@ia.ac.cn.
 2、Resize the input image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )  
 
 3、Run "python test.py"  
+
+# Training
+
+# Dataset
 
 
 # The complete code will be released soon.
