@@ -1,13 +1,17 @@
 # Description
-"2019-06-25 11:52:54/49": model parameter.
+"2019-06-25 11:52:54/49": model parameter. Pre-trained models are available [here](https://drive.google.com/file/d/17MtuXcgMqb5HjBRy4tNL9oLkEI5auLUT/view?usp=sharing).
 
 "dataset/shrink_1024_960/crop": test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
 
 "dataloader.py": load data. 
 
+"loss.py": loss function. 
+
 "network.py": network structure.
 
 "test.py": main program.
+
+"train.py": train model:.
 
 "utils.py": post-processing.
 
