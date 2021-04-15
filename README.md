@@ -32,10 +32,10 @@ Please send an email to xieguowang2018@ia.ac.cn.
 
 2、Resize the input image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )  
 
-3、Run 'python test.py' 
+3、Run `python test.py`
 
 # Training
-Run: 'python train.py'
+Run: `python train.py`
 
 # Dataset
 
