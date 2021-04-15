@@ -38,6 +38,6 @@ Please send an email to xieguowang2018@ia.ac.cn.
 Run: `python train.py`
 
 # Dataset
-The training dataset can be synthesised using the scripts(https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation).
+The training dataset can be synthesised using the [scripts](https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation).
 
 # The complete code will be released soon.
