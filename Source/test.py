@@ -28,11 +28,9 @@ def train(args):
     # Setup Dataloader
 
     data_split = 'data1024_greyV2'
-    data_path = '/dataset/unwarp_new/train/'
-    data_path_validate = '/dataset/unwarp_new/train/'+data_split+'/'
-    data_path_test = '/dataset/'
-
-    test_shrink_sub_dir = 'shrink_1024_960/crop/'
+    data_path = './dataset/unwarp_new/train/'
+    data_path_validate = './dataset/unwarp_new/train/'+data_split+'/'
+    data_path_test = args.data_path_test
 
     args.arch = 'flat_img_classifyAndRegress_grey'
     args.dataset = data_split
@@ -100,7 +98,7 @@ def train(args):
 
     # trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
     # FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
-    FlatImg.loadTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
+    FlatImg.loadTestData()
 
 
     train_time = AverageMeter()
@@ -179,6 +177,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--print-freq', '-p', default=320, type=int,
                         metavar='N', help='print frequency (default: 10)')  # print frequency
+    
+    parser.add_argument('--data_path_test', default='./dataset/shrink_1024_960/crop/', type=str,
+                        help='the path of test images.')  # test image path
 
     parser.add_argument('--output-path', default='./flat/', type=str,
                         help='the path is used to  save output --img or result.')  # GPU id ---choose the GPU id that will be used
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     parser.add_argument('--schema', type=str, default='test',
                         help='train or test')
 
-    parser.set_defaults(resume='/2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
+    parser.set_defaults(resume='./2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
 
     parser.add_argument('--parallel', default='3', type=list,
                         help='choice the gpu id for parallel ')
