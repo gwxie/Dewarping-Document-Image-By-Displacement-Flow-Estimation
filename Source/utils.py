@@ -20,6 +20,8 @@ from scipy.optimize import fsolve
 from torch.autograd import Variable
 import torch.nn.functional as F
 
+import dataloader
+
 def adjust_position(x_min, y_min, x_max, y_max, new_shape):
     if (new_shape[0] - (x_max - x_min)) % 2 == 0:
         f_g_0_0 = (new_shape[0] - (x_max - x_min)) // 2
@@ -67,18 +69,18 @@ class SaveFlatImage(object):
         return np.einsum('njk,nj->nk', np.take(values, vtx, axis=0), wts)
 
     # return np.einsum('nj,nj->n', np.take(values, vtx), wts)
-    def flatByRegressWithClassiy_multiProcess(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False):
+    def flatByRegressWithClassiy_multiProcess(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False, perturbed_img=None):
         # for i_val_i in range(perturbed_label.shape[0]):
         #     self.flatByRegressWithClassiy_triangular_v2_RGB(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch + 1, scheme, is_scaling)
 
         process_pool = Pool(self.batch_size)
         for i_val_i in range(perturbed_label.shape[0]):
             process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v2_RGB,
-                                     args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling))
+                                     args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
         process_pool.close()
         process_pool.join()
 
-    def flatByRegressWithClassiy_triangular_v2_RGB(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False):
+    def flatByRegressWithClassiy_triangular_v2_RGB(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False, perturbed_img=None):
         # if self.preproccess:
         #     perturbed_label[np.sum(perturbed_label, 2) != -2] *= 10
         # perturbed_label = cv2.GaussianBlur(perturbed_label, (3, 3), 0)
@@ -89,8 +91,9 @@ class SaveFlatImage(object):
 
 
         if (scheme == 'test' or scheme == 'eval') and is_scaling:
-            perturbed_img_path = self.scaling_test_perturbed_img_path + im_name
+            perturbed_img_path = self.perturbed_test_img_path + im_name
             perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
+            perturbed_img = dataloader.resize_image(perturbed_img, 1024*2, 960*2)
 
             flat_shape = perturbed_img.shape[:2]
             perturbed_label = cv2.resize(perturbed_label * 2, (flat_shape[1], flat_shape[0]), interpolation=cv2.INTER_LINEAR)
@@ -99,12 +102,13 @@ class SaveFlatImage(object):
             perturbed_label_classify = np.array(perturbed_label_classify).astype(np.uint8)
             # perturbed'_label_classify = np.array(perturbed_label_classify).astype(np.float32)
         else:
-            if scheme == 'test' or scheme == 'eval':
-                perturbed_img_path = self.perturbed_test_img_path + im_name
-            elif scheme == 'validate':
-                RGB_name = im_name.replace('gw', 'png')
-                perturbed_img_path = '/lustre/home/gwxie/data/unwarp_new/train/' + self.data_split + '/validate/png/' + RGB_name
-            perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
+            if perturbed_img is None:
+                if scheme == 'test' or scheme == 'eval':
+                    perturbed_img_path = self.perturbed_test_img_path + im_name
+                elif scheme == 'validate':
+                    RGB_name = im_name.replace('gw', 'png')
+                    perturbed_img_path = '.train/' + self.data_split + '/validate/png/' + RGB_name
+                perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
             flat_shape = perturbed_img.shape[:2]
 
         flat_img = np.full_like(perturbed_img, 256, dtype=np.uint16)
@@ -469,9 +473,9 @@ class FlatImg(object):
                         pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
                         # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
                         pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
-                        # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
+                        perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
 
-                        self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress, pred_classify, im_name, epoch + 1, scheme='eval', is_scaling=is_scaling)
+                        self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress, pred_classify, im_name, epoch + 1, scheme='eval', is_scaling=is_scaling, perturbed_img=perturbed_img)
                     except:
                         print('* save image tested error :'+im_name[0])
 
@@ -522,13 +526,13 @@ class FlatImg(object):
                             pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)         # (4, 1280, 1024, 2)
                             # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
                             pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
-                            # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)         # (4, 1280, 1024, 3)
+                            perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)         # (4, 1280, 1024, 3)
 
                             if save_img_:
                                 self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress,
                                                                                           pred_classify, im_name,
                                                                                           epoch + 1,
-                                                                                          scheme='validate', is_scaling=is_scaling)
+                                                                                          scheme='validate', is_scaling=is_scaling, perturbed_img=perturbed_img)
                             loss_l1_list.append(loss_l1.item())
                             loss_overall_list.append(loss_overall.item())
                             loss_local_list.append(loss_local.item())
@@ -581,12 +585,12 @@ class FlatImg(object):
                             pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
                             # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
                             pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
-                            # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
+                            perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
 
                             self.save_flat_mage.flatByRegressWithClassiy_multiProcess(pred_regress,
                                                                                       pred_classify, im_name,
                                                                                       epoch + 1,
-                                                                                      scheme='test', is_scaling=is_scaling)
+                                                                                      scheme='test', is_scaling=is_scaling, perturbed_img=perturbed_img)
                         # except:
                         #     print('* save image tested error :' + im_name[0])
 
@@ -620,10 +624,10 @@ class FlatImg(object):
                             pred_regress = outputs.data.cpu().numpy().transpose(0, 2, 3, 1)
                             # pred_classify = outputs_classify.data.max(1)[1].cpu().numpy()       #     ==outputs.data.argmax(dim=0).cpu().numpy()
                             pred_classify = outputs_classify.data.round().int().cpu().numpy()  # (4, 1280, 1024)  ==outputs.data.argmax(dim=0).cpu().numpy()
-                            # perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
+                            perturbed_img = images_val.data.cpu().numpy().transpose(0, 2, 3, 1)
 
                             # self.save_flat_mage.flatByRegressWithClassiy_triangular_v2_RGB_v2(pred_regress[0], pred_classify[0], im_name[0], epoch+1, groun_truth_path=self.data_path_test+'scan/scan/', scheme='test')
-                            self.save_flat_mage.flatByRegressWithClassiy_triangular_v2_RGB(pred_regress[0], pred_classify[0], im_name[0], epoch+1, scheme='test')    # 'scan/scan/'
+                            self.save_flat_mage.flatByRegressWithClassiy_triangular_v2_RGB(pred_regress[0], pred_classify[0], im_name[0], epoch+1, scheme='test', perturbed_img=perturbed_img)    # 'scan/scan/'
                         else:
                             continue
                     except:
