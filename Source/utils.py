@@ -400,7 +400,7 @@ class FlatImg(object):
         }
         # sub_dir = 'crop/crop/'
 
-        t1_loader = self.data_loader(self.data_path_test+sub_dir, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
+        t1_loader = self.data_loader(self.data_path_test, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
         testloader1 = data.DataLoader(t1_loader, batch_size=self.args.batch_size, num_workers=self.args.batch_size, pin_memory=True, \
                                        shuffle=False)
 
@@ -419,10 +419,10 @@ class FlatImg(object):
         self.t_loaderSet = t_loaderSet
         # return v_loaderSet, valloaderSet
 
-    def loadTestData(self, is_shuffle=True, sub_dir='shrink_512/crop/'):
+    def loadTestData(self, is_shuffle=True):
 
 
-        t1_loader = self.data_loader(self.data_path_test+sub_dir, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
+        t1_loader = self.data_loader(self.data_path_test, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
         testloader1 = data.DataLoader(t1_loader, batch_size=self.args.batch_size, num_workers=self.args.batch_size, pin_memory=True, \
                                        shuffle=False)
 
