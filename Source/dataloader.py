@@ -17,9 +17,9 @@ def getDatasets(dir):
 '''
 Resize the input image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
 '''
-def resize_image(origin_img):
+def resize_image(origin_img, long_edge=1024, short_edge=960):
 	# long_edge, short_edge = 2048, 1920
-	long_edge, short_edge = 1024, 960
+	# long_edge, short_edge = 1024, 960
 	# long_edge, short_edge = 512, 480
 
 	im_lr = origin_img.shape[0]
