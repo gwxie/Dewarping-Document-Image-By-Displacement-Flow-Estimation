@@ -200,7 +200,13 @@ if __name__ == '__main__':
     if args.resume is not None:
         # args.resume = os.path.join(os.path.abspath(os.path.dirname(__file__)), args.resume)
         if not os.path.isfile(args.resume):
-            raise Exception(args.resume+' -- not exist')
+            raise Exception(args.resume+' -- no find')
+            
+    if args.data_path_test is None:
+        raise Exception('-- No test path')
+    else:    
+        if not os.path.isfile(args.data_path_test):
+            raise Exception(args.data_path_test+' -- no find')
 
     global path, date, date_time                # if load optimizerAndLoss_verified  ,this should be changed
     date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
