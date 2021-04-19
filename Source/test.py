@@ -43,7 +43,6 @@ def train(args):
     '''network'''
     model = ResnetDilatedRgressAndClassifyV2v6v4c1GN(n_classes=n_classes, num_filter=32, BatchNorm='GN', in_channels=3) #
 
-
     if args.parallel is not None:
         device_ids = list(map(int, args.parallel))
         args.gpu = device_ids[0]
@@ -58,40 +57,22 @@ def train(args):
         warnings.warn('no gpu , go sleep !')
         exit()
 
-    if args.optimizer == 'SGD':
-        optimizer = torch.optim.SGD(model.parameters(), lr=0.0001, momentum=0.8, weight_decay=1e-12)
-    elif args.optimizer == 'adam':
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.l_rate, weight_decay=1e-10)     # 1e-12
-    else:
-        assert 'please choice optimizer'
-        exit('error')
-
     if args.resume is not None:
         if os.path.isfile(args.resume):
             print("Loading model and optimizer from checkpoint '{}'".format(args.resume))
             checkpoint = torch.load(args.resume)
-
             model.load_state_dict(checkpoint['model_state'])
-            optimizer.load_state_dict(checkpoint['optimizer_state'])
-            '''
-            model_parameter_dick = {}
-            for k in checkpoint['model_state']:
-                model_parameter_dick['module.'+k] = checkpoint['model_state'][k]
-            model.load_state_dict(model_parameter_dick)
-            '''
             print("Loaded checkpoint '{}' (epoch {})"
                   .format(args.resume, checkpoint['epoch']))
         else:
             print("No checkpoint found at '{}'".format(args.resume))
 
-
     FlatImg = utils.FlatImg(args=args, path=path, date=date, date_time=date_time, _re_date=_re_date, data_split=data_split, model=model, \
-                            reslut_file=reslut_file, n_classes=n_classes, optimizer=optimizer, \
+                            reslut_file=reslut_file, n_classes=n_classes, optimizer=None, \
                             loss_fn=None, loss_classify_fn=None, data_loader=PerturbedDatastsForRegressAndClassify_pickle_color_v2C1, data_loader_hdf5=None, \
                             data_path=data_path, data_path_validate=data_path_validate, data_path_test=data_path_test, data_preproccess=False)          # , valloaderSet=valloaderSet, v_loaderSet=v_loaderSet
     ''' load data '''
     FlatImg.loadTestData()
-
 
     if args.schema == 'test':
         epoch = checkpoint['epoch'] if args.resume is not None else 0
@@ -118,12 +99,6 @@ if __name__ == '__main__':
 
     parser.add_argument('--dataset', nargs='?', type=str, default='v5',
                         help='Dataset to use [\'pascal, camvid, ade20k etc\']')
-
-    parser.add_argument('--img_shrink', nargs='?', type=int, default=None,
-                        help='short edge of the input image')
-
-    parser.add_argument('--n_epoch', nargs='?', type=int, default=300,
-                        help='# of the epochs')
 
     parser.add_argument('--optimizer', type=str, default='adam',
                         help='optimization')
