@@ -100,11 +100,6 @@ def train(args):
                             loss_fn=loss_fun, loss_classify_fn=loss_classify_fun, data_loader=PerturbedDatastsForRegressAndClassify_pickle_color_v2C1, data_loader_hdf5=None, \
                             data_path=data_path, data_path_validate=data_path_validate, data_path_test=data_path_test, data_preproccess=False)          # , valloaderSet=valloaderSet, v_loaderSet=v_loaderSet
     ''' load data '''
-    train_loader = data_loader(data_path, split=data_split, img_shrink=args.img_shrink)
-    trainloader = data.DataLoader(train_loader, batch_size=args.batch_size, num_workers=args.batch_size//2, shuffle=True)
-
-    # trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
-    # FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
     FlatImg.loadTestData()
 
 
@@ -115,7 +110,8 @@ def train(args):
     
     
     if args.schema == 'train':
-        trainloader = FlatImg.loadTrainDataHDF5(data_split=data_split, is_shuffle=True)
+        train_loader = data_loader(data_path, split=data_split, img_shrink=args.img_shrink)
+        trainloader = data.DataLoader(train_loader, batch_size=args.batch_size, num_workers=args.batch_size//2, shuffle=True)
         trainloader_len = len(trainloader)
 
         for epoch in range(epoch_start, args.n_epoch):
