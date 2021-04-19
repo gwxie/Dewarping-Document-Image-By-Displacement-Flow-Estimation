@@ -110,8 +110,8 @@ def train(args):
     
     
     if args.schema == 'train':
-        train_loader = data_loader(data_path, split=data_split, img_shrink=args.img_shrink)
-        trainloader = data.DataLoader(train_loader, batch_size=args.batch_size, num_workers=args.batch_size//2, shuffle=True)
+        trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
+        FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
         trainloader_len = len(trainloader)
 
         for epoch in range(epoch_start, args.n_epoch):
