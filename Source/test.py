@@ -100,16 +100,11 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', nargs='?', type=str, default='v5',
                         help='Dataset to use [\'pascal, camvid, ade20k etc\']')
 
-    parser.add_argument('--optimizer', type=str, default='adam',
-                        help='optimization')
     parser.add_argument('--l_rate', nargs='?', type=float, default=0.0002,
                         help='Learning Rate')
 
     parser.add_argument('--resume', nargs='?', type=str, default=None,
-                        help='Path to previous saved model to restart from')            # python segmentation_train.py --resume=./trained_model/fcn8s_pascla_2018-8-04_model.pkl
-
-    parser.add_argument('--print-freq', '-p', default=320, type=int,
-                        metavar='N', help='print frequency (default: 10)')  # print frequency
+                        help='Path to previous saved model to restart from') 
     
     parser.add_argument('--data_path_test', default='./dataset/shrink_1024_960/crop/', type=str,
                         help='the path of test images.')  # test image path
@@ -145,10 +140,7 @@ if __name__ == '__main__':
     date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
     date_time = time.strftime(' %H:%M:%S', time.localtime(time.time()))
     path = os.path.join(args.output_path, date)
-    # _re_date = None
-
     if not os.path.exists(path):
         os.makedirs(path)
-        # os.mkdir(path)
 
     train(args)
