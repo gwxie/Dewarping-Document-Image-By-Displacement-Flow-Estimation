@@ -84,8 +84,7 @@ def train(args):
                 model_parameter_dick['module.'+k] = checkpoint['model_state'][k]
             model.load_state_dict(model_parameter_dick)
             '''
-
-            # optimizer.load_state_dict(checkpoint['optimizer_state'])          # 1 why runing error 2 alter the optimizer of original program,because which optimizer was changing as the operaion
+            
             print("Loaded checkpoint '{}' (epoch {})"
                   .format(args.resume, checkpoint['epoch']))
         else:
