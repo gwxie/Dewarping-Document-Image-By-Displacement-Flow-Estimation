@@ -26,7 +26,6 @@ def train(args):
         reslut_file = open(path+'/'+date+date_time+'_'+args.arch+'.log', 'w')
 
     # Setup Dataloader
-
     data_split = 'data1024_greyV2'
     data_path = './dataset/unwarp_new/train/'
     data_path_validate = './dataset/unwarp_new/train/'+data_split+'/'
@@ -80,8 +79,6 @@ def train(args):
                 model_parameter_dick['module.'+k] = checkpoint['model_state'][k]
             model.load_state_dict(model_parameter_dick)
             '''
-
-            # optimizer.load_state_dict(checkpoint['optimizer_state'])          # 1 why runing error 2 alter the optimizer of original program,because which optimizer was changing as the operaion
             print("Loaded checkpoint '{}' (epoch {})"
                   .format(args.resume, checkpoint['epoch']))
         else:
@@ -93,15 +90,8 @@ def train(args):
                             loss_fn=None, loss_classify_fn=None, data_loader=PerturbedDatastsForRegressAndClassify_pickle_color_v2C1, data_loader_hdf5=None, \
                             data_path=data_path, data_path_validate=data_path_validate, data_path_test=data_path_test, data_preproccess=False)          # , valloaderSet=valloaderSet, v_loaderSet=v_loaderSet
     ''' load data '''
-    # train_loader = data_loader(data_path, split=data_split, img_shrink=args.img_shrink)
-    # trainloader = data.DataLoader(train_loader, batch_size=args.batch_size, num_workers=args.batch_size//2, shuffle=True)
-
-    # trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
-    # FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
     FlatImg.loadTestData()
 
-
-    train_time = AverageMeter()
 
     if args.schema == 'test':
         epoch = checkpoint['epoch'] if args.resume is not None else 0
@@ -119,39 +109,7 @@ def train(args):
         FlatImg.validateOrTestModelV2GreyC1(epoch, 0, validate_test='t', is_scaling=True)
         exit()
 
-    m, s = divmod(train_time.sum, 60)
-    h, m = divmod(m, 60)
-    print("All Train Time : %02d:%02d:%02d\n" % (h, m, s))
-    print("All Train Time : %02d:%02d:%02d\n" % (h, m, s), file=reslut_file)
-
     reslut_file.close()
-
-class AverageMeter(object):
-    """Computes and stores the average and current value"""
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-def adjust_learning_rate(optimizer, epoch, args_lr, args_momentum, args_parallel):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args_lr * (0.2 ** (epoch // 30))   # ** == math.pow      // == math.floor
-    # momentum = args_momentum * (0.6 ** (epoch // 30))
-    for param_group in optimizer.param_groups:
-    # for param_group in optimizer.param_groups if args_parallel is None else optimizer.module.param_groups:
-        param_group['l_rate'] = lr
-        # param_group['momentum'] = momentum
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
