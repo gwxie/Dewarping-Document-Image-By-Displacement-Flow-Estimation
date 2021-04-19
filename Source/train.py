@@ -249,16 +249,6 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count
 
-def adjust_learning_rate(optimizer, epoch, args_lr, args_momentum, args_parallel):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args_lr * (0.2 ** (epoch // 30))   # ** == math.pow      // == math.floor
-    # momentum = args_momentum * (0.6 ** (epoch // 30))
-    for param_group in optimizer.param_groups:
-    # for param_group in optimizer.param_groups if args_parallel is None else optimizer.module.param_groups:
-        param_group['l_rate'] = lr
-        # param_group['momentum'] = momentum
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
     parser.add_argument('--arch', nargs='?', type=str, default='flat_unet',
