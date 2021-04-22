@@ -39,5 +39,6 @@ Run `python train.py`
 
 # Dataset
 The training dataset can be synthesised using the [scripts](https://github.com/gwxie/Distorted-Image-With-Flow).
+Thanks for attention, and sorry for the late reply. Please wait a few days
 
 # The complete code will be released soon.
