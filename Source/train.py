@@ -27,8 +27,8 @@ def train(args):
 
     # Setup Dataloader
 
-    data_path = './dataset/unwarp_new/train/'
-    data_path_validate = './dataset/unwarp_new/train/'
+    data_path = args.data_path_train
+    data_path_validate = args.data_path_validate
     data_path_test = args.data_path_test
 
     args.arch = 'flat_img_classifyAndRegress_grey'
@@ -262,7 +262,10 @@ if __name__ == '__main__':
                         metavar='N', help='print frequency (default: 10)')  # print frequency
     
     parser.add_argument('--data_path_train', default='./dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
-                        help='the path of train images.')  # test image path
+                        help='the path of train images.')  # train image path
+        
+    parser.add_argument('--data_path_validate', default='./dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
+                        help='the path of validate images.')  # validate image path
     
     parser.add_argument('--data_path_test', default='./dataset/shrink_1024_960/crop/', type=str,
                         help='the path of test images.')  # test image path
