@@ -1,19 +1,19 @@
 # Description
-"2019-06-25 11:52:54/49": model parameter. Pre-trained models are available [here](https://drive.google.com/file/d/17MtuXcgMqb5HjBRy4tNL9oLkEI5auLUT/view?usp=sharing).
+`2019-06-25 11:52:54/49` model parameter. Pre-trained models are available [here](https://drive.google.com/file/d/17MtuXcgMqb5HjBRy4tNL9oLkEI5auLUT/view?usp=sharing).
 
-"dataset/shrink_1024_960/crop": test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
+`dataset/shrink_1024_960/crop` test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
 
-"dataloader.py": load data. 
+`dataloader.py` load data. 
 
-"loss.py": loss function. 
+`loss.py` loss function. 
 
-"network.py": network structure.
+`network.py` network structure.
 
-"test.py": main program.
+`test.py` main program.
 
-"train.py": train model:.
+`train.py` train model:.
 
-"utils.py": post-processing.
+`utils.py` post-processing.
 
 
 
@@ -29,4 +29,4 @@ Run `python train.py --data_path_train=./dataset/unwarp_new/train/data1024_greyV
 
 # Dataset
 - `./dataset/unwarp_new/train/data1024_greyV2/color/` is the training data with 6 dimensions, namely rgb image, pixel displacement and category.
-- We synthesized 80K images which have the same height and width (i.e., 1024 x 960). Moreover, our ground-truth flow has three channels. For the first two channels, we define the displacement (∆x, ∆y) at pixel-level which indicate how far each pixel have to move to reach its position in the undistorted image as the rectified Ground-truth. For the last channel, we represent the foreground or background by using the categories (1 or 0) at pixel-level.
+- Synthesized images have same height and width (i.e., 1024 x 960). Moreover, our ground-truth flow has three channels. For the first two channels, we define the displacement (∆x, ∆y) at pixel-level which indicate how far each pixel have to move to reach its position in the undistorted image as the rectified Ground-truth. For the last channel, we represent the foreground or background by using the categories (1 or 0) at pixel-level.
