@@ -3,6 +3,8 @@
 
 `dataset/shrink_1024_960/crop` test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
 
+`/dataset/unwarp_new/train/data1024_greyV2/color` train dataset. 
+
 `dataloader.py` load data. 
 
 `loss.py` loss function. 
@@ -11,7 +13,7 @@
 
 `test.py` main program.
 
-`train.py` train model:.
+`train.py` train model.
 
 `utils.py` post-processing.
 
