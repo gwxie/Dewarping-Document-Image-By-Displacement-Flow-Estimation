@@ -27,4 +27,6 @@
 # Training
 Run `python train.py --data_path_train=./dataset/unwarp_new/train/data1024_greyV2/color/  --data_path_validate=./dataset/unwarp_new/train/data1024_greyV2/color/ --data_path_test=./dataset/shrink_1024_960/crop/`
 
-
+# Dataset
+- './dataset/unwarp_new/train/data1024_greyV2/color/' is the training data with 6 dimensions, namely rgb image, pixel displacement and category.
+- We synthesized 80K images which have the same height and width (i.e., 1024 x 960). Moreover, our ground-truth flow has three channels. For the first two channels, we define the displacement (∆x, ∆y) at pixel-level which indicate how far each pixel have to move to reach its position in the undistorted image as the rectified Ground-truth. For the last channel, we represent the foreground or background by using the categories (1 or 0) at pixel-level.
