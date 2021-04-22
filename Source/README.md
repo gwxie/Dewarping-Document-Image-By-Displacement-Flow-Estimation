@@ -1,21 +1,21 @@
 # Description
-`2019-06-25 11:52:54/49` model parameter. Pre-trained models are available [here](https://drive.google.com/file/d/17MtuXcgMqb5HjBRy4tNL9oLkEI5auLUT/view?usp=sharing).
+`2019-06-25 11:52:54/49` contains model parameter. Pre-trained models are available [here](https://drive.google.com/file/d/17MtuXcgMqb5HjBRy4tNL9oLkEI5auLUT/view?usp=sharing).
 
-`dataset/shrink_1024_960/crop` test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
+`dataset/shrink_1024_960/crop` contains test dataset. We resized the image into 1024x960 (zooming in or out along the longest side and keeping the aspect ration, then filling zero for padding. )
 
-`/dataset/unwarp_new/train/data1024_greyV2/color` train dataset. 
+`/dataset/unwarp_new/train/data1024_greyV2/color` contains train dataset. 
 
-`dataloader.py` load data. 
+`dataloader.py` has functions to load data. 
 
-`loss.py` loss function. 
+`loss.py` has loss functions. 
 
-`network.py` network structure.
+`network.py` has network structure.
 
-`test.py` main program.
+`test.py` is main program for testing.
 
-`train.py` train model.
+`train.py` is main program for training.
 
-`utils.py` post-processing.
+`utils.py` is post-processing.
 
 
 
