@@ -6,15 +6,12 @@ train OR test
 '''
 import sys, os
 import time
-
 import argparse
 import torch
 import re
-
 import warnings
 from network import ResnetDilatedRgressAndClassifyV2v6v4c1GN
 import utils as utils
-
 from perturbed_dataset import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
 from loss import Losses
 
@@ -30,24 +27,17 @@ def train(args):
 
     # Setup Dataloader
 
-    data_split = 'data1024_greyV2'
     data_path = './dataset/unwarp_new/train/'
-    data_path_validate = './dataset/unwarp_new/train/'+data_split+'/'
+    data_path_validate = './dataset/unwarp_new/train/'
     data_path_test = args.data_path_test
 
-
     args.arch = 'flat_img_classifyAndRegress_grey'
-    args.dataset = data_split
     print(args)
     print(args, file=reslut_file)
-    print('data_split :' + data_split)
-    print('data_split :' + data_split, file=reslut_file)
 
     n_classes = 2
-
     '''network'''
     model = ResnetDilatedRgressAndClassifyV2v6v4c1GN(n_classes=n_classes, num_filter=32, BatchNorm='GN', in_channels=3) #
-
 
     if args.parallel is not None:
         device_ids = list(map(int, args.parallel))
@@ -84,7 +74,6 @@ def train(args):
                 model_parameter_dick['module.'+k] = checkpoint['model_state'][k]
             model.load_state_dict(model_parameter_dick)
             '''
-            
             print("Loaded checkpoint '{}' (epoch {})"
                   .format(args.resume, checkpoint['epoch']))
         else:
@@ -94,22 +83,20 @@ def train(args):
     loss_fun = loss_fun_classes.loss_fn_v6v8_compareLSC
     loss_classify_fun = loss_fun_classes.loss_fn_binary_cross_entropy_with_logits
 
-    FlatImg = utils.FlatImg(args=args, path=path, date=date, date_time=date_time, _re_date=_re_date, data_split=data_split, model=model, \
+    FlatImg = utils.FlatImg(args=args, path=path, date=date, date_time=date_time, _re_date=_re_date, model=model, \
                             reslut_file=reslut_file, n_classes=n_classes, optimizer=optimizer, \
                             loss_fn=loss_fun, loss_classify_fn=loss_classify_fun, data_loader=PerturbedDatastsForRegressAndClassify_pickle_color_v2C1, data_loader_hdf5=None, \
                             data_path=data_path, data_path_validate=data_path_validate, data_path_test=data_path_test, data_preproccess=False)          # , valloaderSet=valloaderSet, v_loaderSet=v_loaderSet
     ''' load data '''
     FlatImg.loadTestData()
 
-
     train_time = AverageMeter()
     losses = AverageMeter()
     FlatImg.lambda_loss = 0.1
     FlatImg.lambda_loss_classify = 1
     
-    
     if args.schema == 'train':
-        trainloader = FlatImg.loadTrainData(data_split=data_split, is_shuffle=True)
+        trainloader = FlatImg.loadTrainData(data_split='train', is_shuffle=True)
         FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
         trainloader_len = len(trainloader)
 
@@ -273,6 +260,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--print-freq', '-p', default=320, type=int,
                         metavar='N', help='print frequency (default: 10)')  # print frequency
+    
+    parser.add_argument('--data_path_train', default='./dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
+                        help='the path of train images.')  # test image path
     
     parser.add_argument('--data_path_test', default='./dataset/shrink_1024_960/crop/', type=str,
                         help='the path of test images.')  # test image path
