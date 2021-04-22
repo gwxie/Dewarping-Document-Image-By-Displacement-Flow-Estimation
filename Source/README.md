@@ -5,11 +5,11 @@
 
 `/dataset/unwarp_new/train/data1024_greyV2/color` contains train dataset. 
 
-`dataloader.py` has functions to load data. 
+`dataloader.py` is used to load data. 
 
-`loss.py` has loss functions. 
+`loss.py` is loss functions. 
 
-`network.py` has network structure.
+`network.py` is network structure.
 
 `test.py` is main program for testing.
 
