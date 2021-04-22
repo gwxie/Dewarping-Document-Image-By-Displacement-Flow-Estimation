@@ -25,6 +25,6 @@
 3、Run `python test.py --data_path_test=./dataset/shrink_1024_960/crop/`
 
 # Training
-Run `python train.py`
+Run `python train.py --data_path_train=./dataset/unwarp_new/train/data1024_greyV2/color/  --data_path_validate=./dataset/unwarp_new/train/data1024_greyV2/color/ --data_path_test=./dataset/shrink_1024_960/crop/`
 
 
