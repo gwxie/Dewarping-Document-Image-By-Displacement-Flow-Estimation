@@ -59,16 +59,16 @@ class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 		self.images = collections.defaultdict(list)
 		self.labels = collections.defaultdict(list)
 
-		datasets = ['validate', 'test', 'data1024_greyV2', 'data1024_v1']
+		datasets = ['validate', 'test', 'train']
 
 		if self.split == 'test':
 			img_file_list = getDatasets(os.path.join(self.root))
 
 			self.images[self.split] = sorted(img_file_list, key=lambda num: (
 			int(re.match(r'(\d+)_(\d+)( copy.png)', num, re.IGNORECASE).group(1)), int(re.match(r'(\d+)_(\d+)( copy.png)', num, re.IGNORECASE).group(2))))
-		else:
+		elif self.split in datasets:
 			img_file_list = []
-			img_file_list_ = getDatasets(os.path.join(self.root, self.split))
+			img_file_list_ = getDatasets(os.path.join(self.root))
 			for id_ in img_file_list_:
 				img_file_list.append(id_.rstrip())
 
