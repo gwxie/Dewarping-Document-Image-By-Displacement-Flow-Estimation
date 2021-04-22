@@ -27,7 +27,8 @@
 3、Run `python test.py --data_path_test=./dataset/shrink_1024_960/crop/`
 
 # Training
-Run `python train.py --data_path_train=./dataset/unwarp_new/train/data1024_greyV2/color/  --data_path_validate=./dataset/unwarp_new/train/data1024_greyV2/color/ --data_path_test=./dataset/shrink_1024_960/crop/`
+- Please specify the path of the data.
+- Run `python train.py --data_path_train=./dataset/unwarp_new/train/data1024_greyV2/color/  --data_path_validate=./dataset/unwarp_new/train/data1024_greyV2/color/ --data_path_test=./dataset/shrink_1024_960/crop/`
 
 # Dataset
 - `./dataset/unwarp_new/train/data1024_greyV2/color/` is the training data with 6 dimensions, namely rgb image, pixel displacement and category.
