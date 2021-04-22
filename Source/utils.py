@@ -107,7 +107,7 @@ class SaveFlatImage(object):
                     perturbed_img_path = self.perturbed_test_img_path + im_name
                 elif scheme == 'validate':
                     RGB_name = im_name.replace('gw', 'png')
-                    perturbed_img_path = '.train/' + self.data_split + '/validate/png/' + RGB_name
+                    perturbed_img_path = '.YOUR_PATH_/validate/png/' + RGB_name
                 perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
             flat_shape = perturbed_img.shape[:2]
 
@@ -182,7 +182,7 @@ class SaveFlatImage(object):
             flat_img_crop = flat_img[flat_x_min:flat_x_max, flat_y_min:flat_y_max]
 
             ''''''
-            scan_img_path = '/lustre/home/gwxie/data/unwarp_new/test/scan/scan_/'
+            scan_img_path = '.YOUR_PATH_/scan/'
             groundTrue_img = cv2.imread(
                 scan_img_path + re.match(r'(\d+)_(\d+)( copy.png)', im_name, re.IGNORECASE).group(1) + '.png',
                 flags=cv2.IMREAD_COLOR)
@@ -366,7 +366,7 @@ class FlatImg(object):
         print("All Train Time : %02d:%02d:%02d\n" % (h, m, s))
 
     def loadTrainDataHDF5(self, data_split, is_shuffle=True):
-        train_loader = self.data_loader_hdf5(self.data_path, split=data_split, group='train')
+        train_loader = self.data_loader_hdf5(self.data_path, split='train', group='train')
         trainloader = data.DataLoader(train_loader, batch_size=self.args.batch_size, num_workers=1, pin_memory=True, drop_last=True, shuffle=is_shuffle)
         # trainloader = data.DataLoader(train_loader, batch_size=self.args.batch_size, num_workers=0, drop_last=True, shuffle=is_shuffle)   #  pin_memory=True,
 
@@ -375,7 +375,7 @@ class FlatImg(object):
         return trainloader
 
     def loadTrainData(self, data_split, is_shuffle=True):
-        train_loader = self.data_loader(self.data_path, split=data_split, img_shrink=self.args.img_shrink, preproccess=self.data_preproccess)
+        train_loader = self.data_loader(self.data_path, split='train', img_shrink=self.args.img_shrink, preproccess=self.data_preproccess)
         trainloader = data.DataLoader(train_loader, batch_size=self.args.batch_size, num_workers=self.args.batch_size, drop_last=True, pin_memory=True,
                                       shuffle=is_shuffle)
         return trainloader
