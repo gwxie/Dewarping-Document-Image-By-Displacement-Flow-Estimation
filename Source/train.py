@@ -287,9 +287,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.resume is not None:
-    # args.resume = os.path.join(os.path.abspath(os.path.dirname(__file__)), args.resume)
-    if not os.path.isfile(args.resume):
-        raise Exception(args.resume+' -- no find')
+        # args.resume = os.path.join(os.path.abspath(os.path.dirname(__file__)), args.resume)
+        if not os.path.isfile(args.resume):
+            raise Exception(args.resume+' -- no find')
             
     if args.data_path_test is None:
         raise Exception('-- No test path')
