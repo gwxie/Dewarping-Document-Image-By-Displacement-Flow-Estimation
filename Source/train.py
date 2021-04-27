@@ -95,6 +95,8 @@ def train(args):
     FlatImg.lambda_loss = 0.1
     FlatImg.lambda_loss_classify = 1
     
+    epoch_start = checkpoint['epoch'] if args.resume is not None else 0
+    
     if args.schema == 'train':
         trainloader = FlatImg.loadTrainData(data_split='train', is_shuffle=True)
         FlatImg.loadValidateAndTestData(is_shuffle=True, sub_dir=test_shrink_sub_dir)
