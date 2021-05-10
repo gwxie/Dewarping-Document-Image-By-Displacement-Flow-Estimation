@@ -23,8 +23,6 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 # Release Code
 The source code is open, please download from Source. 
 
-Sorry to be busy with master's thesis and graduation matters. Please understand that the reply is slow.
-
 Please send an email to xieguowang2018@ia.ac.cn.
 
 # Running
@@ -39,6 +37,4 @@ Run `python train.py`
 
 # Dataset
 The training dataset can be synthesised using the [scripts](https://github.com/gwxie/Distorted-Image-With-Flow).
-Thanks for attention, and sorry for the late reply. Please wait a few days
 
-# The complete code will be released soon.
