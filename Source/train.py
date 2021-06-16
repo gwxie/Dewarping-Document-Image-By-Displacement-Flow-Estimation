@@ -31,7 +31,6 @@ def train(args):
     data_path_validate = args.data_path_validate
     data_path_test = args.data_path_test
 
-    args.arch = 'flat_img_classifyAndRegress_grey'
     print(args)
     print(args, file=reslut_file)
 
@@ -240,8 +239,8 @@ class AverageMeter(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
-    parser.add_argument('--arch', nargs='?', type=str, default='flat_unet',
-                        help='Architecture to use [\'fcn8s, unet, segnet etc\']')
+    parser.add_argument('--arch', nargs='?', type=str, default='Dewarping-Document-Image-By-Displacement-Flow-Estimation',
+                        help='Architecture')
 
     parser.add_argument('--dataset', nargs='?', type=str, default='v5',
                         help='Dataset to use [\'pascal, camvid, ade20k etc\']')
