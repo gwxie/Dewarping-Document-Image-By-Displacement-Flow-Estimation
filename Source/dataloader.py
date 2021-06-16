@@ -83,7 +83,7 @@ class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 		if self.split == 'validate':
 			for im_name in self.images[self.split]:
 				# if 'SinglePage' in im_name:
-				im_path = pjoin(self.root, self.split, 'color', im_name)
+				im_path = pjoin(self.root, im_name)
 				try:
 					with open(im_path, 'rb') as f:
 						perturbed_data = pickle.load(f)
@@ -112,7 +112,7 @@ class PerturbedDatastsForRegressAndClassify_pickle_color_v2C1(data.Dataset):
 		else:
 			im_name = self.images[self.split][item]
 
-			im_path = pjoin(self.root, self.split, 'color', im_name)
+			im_path = pjoin(self.root, im_name)
 
 			with open(im_path, 'rb') as f:
 				perturbed_data = pickle.load(f)
