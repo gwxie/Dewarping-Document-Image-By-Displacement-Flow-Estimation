@@ -295,7 +295,7 @@ if __name__ == '__main__':
     if args.data_path_test is None:
         raise Exception('-- No test path')
     else:    
-        if not os.path.isfile(args.data_path_test):
+        if not os.path.exists(args.data_path_test):
             raise Exception(args.data_path_test+' -- no find')
 
     global path, date, date_time                # if load optimizerAndLoss_verified  ,this should be changed
