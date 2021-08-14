@@ -422,7 +422,7 @@ class FlatImg(object):
     def loadTestData(self, is_shuffle=True):
 
 
-        t1_loader = self.data_loader(self.data_path_test, split='test', img_shrink=self.args.img_shrink, is_return_img_name=True)
+        t1_loader = self.data_loader(self.data_path_test, split='test', img_shrink=None, is_return_img_name=True)
         testloader1 = data.DataLoader(t1_loader, batch_size=self.args.batch_size, num_workers=self.args.batch_size, pin_memory=True, \
                                        shuffle=False)
 
