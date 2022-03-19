@@ -15,7 +15,7 @@ from multiprocessing import Pool
 
 import random
 import scipy.spatial.qhull as qhull
-
+from scipy.interpolate import griddata
 from scipy.optimize import fsolve
 from torch.autograd import Variable
 import torch.nn.functional as F
@@ -75,10 +75,68 @@ class SaveFlatImage(object):
 
         process_pool = Pool(self.batch_size)
         for i_val_i in range(perturbed_label.shape[0]):
-            process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v2_RGB,
+#             process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v2_RGB,
+#                                      args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
+            process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v3_RGB,
                                      args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
+            
         process_pool.close()
         process_pool.join()
+        
+    def flatByRegressWithClassiy_triangular_v3_RGB(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False, perturbed_img=None):
+        # if self.preproccess:
+        #     perturbed_label[np.sum(perturbed_label, 2) != -2] *= 10
+        # perturbed_label = cv2.GaussianBlur(perturbed_label, (3, 3), 0)
+        # perturbed_label = cv2.blur(perturbed_label, (13, 13))
+        # perturbed_label = cv2.GaussianBlur(perturbed_label, (5, 5), 0)
+        # perturbed_label_backups = perturbed_label.copy()
+        # perturbed_label_classify = np.around(cv2.GaussianBlur(perturbed_label_classify.astype(np.float32), (33, 33), 0)).astype(np.uint8)
+
+
+        if (scheme == 'test' or scheme == 'eval') and is_scaling:
+            perturbed_img_path = self.perturbed_test_img_path + im_name
+            perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
+            perturbed_img = dataloader.resize_image(perturbed_img, 1024*2, 960*2)
+
+            flat_shape = perturbed_img.shape[:2]
+            perturbed_label = cv2.resize(perturbed_label * 2, (flat_shape[1], flat_shape[0]), interpolation=cv2.INTER_LINEAR)
+            perturbed_label_classify = cv2.resize(perturbed_label_classify.astype(np.float32), (flat_shape[1], flat_shape[0]), interpolation=cv2.INTER_LINEAR)
+            perturbed_label_classify[perturbed_label_classify <= 0.5] = 0
+            perturbed_label_classify = np.array(perturbed_label_classify).astype(np.uint8)
+            # perturbed'_label_classify = np.array(perturbed_label_classify).astype(np.float32)
+        else:
+            if perturbed_img is None:
+                if scheme == 'test' or scheme == 'eval':
+                    perturbed_img_path = self.perturbed_test_img_path + im_name
+                elif scheme == 'validate':
+                    RGB_name = im_name.replace('gw', 'png')
+                    perturbed_img_path = '.YOUR_PATH_/validate/png/' + RGB_name
+                perturbed_img = cv2.imread(perturbed_img_path, flags=cv2.IMREAD_COLOR)
+            flat_shape = perturbed_img.shape[:2]
+
+        flat_img = np.full_like(perturbed_img, 256, dtype=np.uint16)
+        
+        
+        perturbed_img_ = perturbed_img[perturbed_label_classify==1]
+        origin_pixel_position = np.argwhere(np.zeros(flat_shape, dtype=np.uint32) == 0).reshape(flat_shape[0], flat_shape[1], 2)
+        flow = perturbed_label + origin_pixel_position
+        flat_img=griddata(flow[perturbed_label_classify==1],perturbed_img_,(origin_pixel_position[:,:,0],origin_pixel_position[:,:,1]),method='linear')
+        # cv2.imwrite('./dewarp2.png', img)  
+    
+        perturbed_img = perturbed_img.reshape(flat_shape[0], flat_shape[1], 3)
+        flat_img = flat_img.astype(np.uint8)
+        img_figure = np.concatenate(
+            (perturbed_img, flat_img), axis=1)
+
+        i_path = os.path.join(self.path, self.date + self.date_time + ' @' + self._re_date,
+                              str(epoch)) if self._re_date is not None else os.path.join(self.path, self.date + self.date_time, str(epoch))
+        if scheme == 'test':
+            i_path += '/test'
+        if not os.path.exists(i_path):
+            os.makedirs(i_path)
+
+        im_name = im_name.replace('gw', 'png')
+        cv2.imwrite(i_path + '/' + im_name, img_figure)
 
     def flatByRegressWithClassiy_triangular_v2_RGB(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False, perturbed_img=None):
         # if self.preproccess:
