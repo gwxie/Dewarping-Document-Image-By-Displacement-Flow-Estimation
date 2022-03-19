@@ -50,10 +50,9 @@ class SaveFlatImage(object):
         self.data_split = data_split
         self.preproccess = preproccess
         self.validate_groun_truth_path =data_path_validate+'validate/scan/'
-        self.test_groun_truth_path =data_path_test+'scan/1024_960_scan/'
+        self.test_groun_truth_path ='your_groun_truth_path/'
         self.batch_size = batch_size
-        self.scaling_test_perturbed_img_path = './dataset/shrink_2048_1920/crop/'
-        self.perturbed_test_img_path = './dataset/shrink_1024_960/crop/'
+        self.perturbed_test_img_path = data_path_test+
 
     def interp_weights(self, xyz, uvw):
         tri = qhull.Delaunay(xyz)
