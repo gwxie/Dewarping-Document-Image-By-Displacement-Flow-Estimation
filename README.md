@@ -1,8 +1,8 @@
 # Dewarping Document Image
 Dewarping Document Image By Displacement Flow Estimation with Fully Convolutional Network.
 
-Please browse 90_paper.pdf
 
+See [“paper”](https://arxiv.org/abs/2104.06815) for more information.
 
 
 
