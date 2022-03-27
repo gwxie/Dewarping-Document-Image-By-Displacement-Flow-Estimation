@@ -14,6 +14,12 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 # Compare
 ![image](https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation/blob/main/compare.jpg)
 
+# Requirements
+<p>python >=3.7</p>
+<p>pytorch</p>
+<p>opencv-python</p>
+<p>scipy</p>
+
 # Notice
 - 2020.11.10 update the result file, including 6-25_11_52_54-49-rgb_ and 6-25_11_52_54-49_.
 
