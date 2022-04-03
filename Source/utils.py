@@ -49,10 +49,10 @@ class SaveFlatImage(object):
         self._re_date = _re_date
         self.data_split = data_split
         self.preproccess = preproccess
-        self.validate_groun_truth_path =data_path_validate+'validate/scan/'
-        self.test_groun_truth_path ='your_groun_truth_path/'
+        # self.validate_groun_truth_path =data_path_validate+'validate/scan/'
+        # self.test_groun_truth_path ='your_groun_truth_path/'
         self.batch_size = batch_size
-        self.perturbed_test_img_path = data_path_test+
+        self.perturbed_test_img_path = data_path_test
 
     def interp_weights(self, xyz, uvw):
         tri = qhull.Delaunay(xyz)
@@ -74,14 +74,12 @@ class SaveFlatImage(object):
 
         process_pool = Pool(self.batch_size)
         for i_val_i in range(perturbed_label.shape[0]):
-#             process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v2_RGB,
-#                                      args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
-            process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v3_RGB,
-                                     args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
+            process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v2_RGB, args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
+            # process_pool.apply_async(func=self.flatByRegressWithClassiy_triangular_v3_RGB, args=(perturbed_label[i_val_i], perturbed_label_classify[i_val_i], im_name[i_val_i], epoch, scheme, is_scaling, perturbed_img[i_val_i]))
             
         process_pool.close()
         process_pool.join()
-        
+
     def flatByRegressWithClassiy_triangular_v3_RGB(self, perturbed_label, perturbed_label_classify, im_name, epoch, scheme='validate', is_scaling=False, perturbed_img=None):
         # if self.preproccess:
         #     perturbed_label[np.sum(perturbed_label, 2) != -2] *= 10
@@ -115,6 +113,16 @@ class SaveFlatImage(object):
 
         flat_img = np.full_like(perturbed_img, 256, dtype=np.uint16)
         
+        '''scaling
+        origin_pixel_position = np.argwhere(np.zeros(flat_shape, dtype=np.uint32) == 0).reshape(flat_shape[0], flat_shape[1], 2)
+        flow = perturbed_label + origin_pixel_position 
+
+        grid_shape = [512, 512]
+        flow = cv2.resize(flow, (flat_shape[1], flat_shape[0]), interpolation=cv2.INTER_LINEAR)
+        perturbed_label_classify = cv2.resize(perturbed_label_classify.astype(np.float32), (grid_shape[1], grid_shape[0]), interpolation=cv2.INTER_LINEAR)
+        perturbed_label_classify[perturbed_label_classify <= 0.5] = 0
+        perturbed_label_classify = np.array(perturbed_label_classify).astype(np.uint8)
+        '''
         
         perturbed_img_ = perturbed_img[perturbed_label_classify==1]
         origin_pixel_position = np.argwhere(np.zeros(flat_shape, dtype=np.uint32) == 0).reshape(flat_shape[0], flat_shape[1], 2)
