@@ -12,8 +12,8 @@ import cv2
 
 from torch.utils import data
 def getDatasets(dir):
-	if not os.path.isfile(dir):
-            raise Exception(dir+' -- path no find')
+	if not os.path.exists(dir):
+	    raise Exception(dir+' -- path no find')
 	return os.listdir(dir)
 
 '''

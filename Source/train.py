@@ -10,16 +10,21 @@ import argparse
 import torch
 import re
 import warnings
+from pathlib import Path
+FILE = Path(__file__).resolve()
+ROOT = FILE.parents[0]
+sys.path.append('ROOT')
+
 from network import ResnetDilatedRgressAndClassifyV2v6v4c1GN
 import utils as utils
-from perturbed_dataset import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
+from dataloader import PerturbedDatastsForRegressAndClassify_pickle_color_v2C1
 from loss import Losses
 
 def train(args):
     global _re_date
     if args.resume is not None:
         re_date = re.compile(r'\d{4}-\d{1,2}-\d{1,2}')
-        _re_date = re_date.search(args.resume).group(0)
+        _re_date = re_date.search(args.resume.name).group(0)
         reslut_file = open(path + '/' + date + date_time + ' @' + _re_date + '_' + args.arch + '.log', 'w')
     else:
         _re_date = None
@@ -27,9 +32,9 @@ def train(args):
 
     # Setup Dataloader
 
-    data_path = args.data_path_train
-    data_path_validate = args.data_path_validate
-    data_path_test = args.data_path_test
+    data_path = str(args.data_path_train)+'/'
+    data_path_validate = str(args.data_path_validate)+'/'
+    data_path_test = str(args.data_path_test)+'/'
 
     print(args)
     print(args, file=reslut_file)
@@ -63,7 +68,7 @@ def train(args):
     if args.resume is not None:
         if os.path.isfile(args.resume):
             print("Loading model and optimizer from checkpoint '{}'".format(args.resume))
-            checkpoint = torch.load(args.resume)
+            checkpoint = torch.load(args.resume, map_location='cuda:'+str(args.gpu))
 
             model.load_state_dict(checkpoint['model_state'])
             optimizer.load_state_dict(checkpoint['optimizer_state'])
@@ -256,33 +261,33 @@ if __name__ == '__main__':
     parser.add_argument('--l_rate', nargs='?', type=float, default=0.0002,
                         help='Learning Rate')
 
-    parser.add_argument('--resume', nargs='?', type=str, default=None,
-                        help='Path to previous saved model to restart from')            # python segmentation_train.py --resume=./trained_model/fcn8s_pascla_2018-8-04_model.pkl
-
     parser.add_argument('--print-freq', '-p', default=320, type=int,
                         metavar='N', help='print frequency (default: 10)')  # print frequency
+
+    parser.add_argument('--resume', default=ROOT / '2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl', type=str, 
+                        help='Path to previous saved model to restart from') 
     
-    parser.add_argument('--data_path_train', default='./dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
+    parser.add_argument('--data_path_train', default=ROOT / 'dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
                         help='the path of train images.')  # train image path
         
-    parser.add_argument('--data_path_validate', default='./dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
+    parser.add_argument('--data_path_validate', default=ROOT / 'dataset/unwarp_new/train/data1024_greyV2/color/', type=str,
                         help='the path of validate images.')  # validate image path
     
-    parser.add_argument('--data_path_test', default='./dataset/shrink_1024_960/crop/', type=str,
+    parser.add_argument('--data_path_test', default=ROOT / 'dataset/shrink_1024_960/crop/', type=str,
                         help='the path of test images.')  # test image path
 
-    parser.add_argument('--output-path', default='./flat/', type=str,
+    parser.add_argument('--output-path', default=ROOT / 'flat/', type=str,
                         help='the path is used to  save output --img or result.')  # GPU id ---choose the GPU id that will be used
 
-    parser.add_argument('--batch_size', nargs='?', type=int, default=6,
+    parser.add_argument('--batch_size', nargs='?', type=int, default=1,
                         help='Batch Size')#16
 
     parser.add_argument('--schema', type=str, default='test',
                         help='train or test')
 
-    parser.set_defaults(resume='./2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
+    # parser.set_defaults(resume='./2019-06-25 11:52:54/49/2019-06-25 11:52:54flat_img_classifyAndRegress_grey-data1024_greyV2.pkl')
 
-    parser.add_argument('--parallel', default='3', type=list,
+    parser.add_argument('--parallel', default='6', type=list,
                         help='choice the gpu id for parallel ')
 
     args = parser.parse_args()
