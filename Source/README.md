@@ -37,3 +37,6 @@
 # Q&A
 1. Q:How to open '*.gw' files?
 https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation/blob/1278a1f20dd52ca14480a808c849666f6f28afa3/Source/dataloader.py#L118
+'im' have the same height and width (i.e., 1024 x 960);
+'lbl' is the displacement (∆x, ∆y) at pixel-level;
+'lbl_classify' is the foreground or background by using the categories (1 or 0) at pixel-level;
