@@ -32,3 +32,8 @@
 # Dataset
 - `./dataset/unwarp_new/train/data1024_greyV2/color/` is the training data with 6 dimensions, namely rgb image, pixel displacement and category.
 - Synthesized images have same height and width (i.e., 1024 x 960). Moreover, our ground-truth flow has three channels. For the first two channels, we define the displacement (∆x, ∆y) at pixel-level which indicate how far each pixel have to move to reach its position in the undistorted image as the rectified Ground-truth. For the last channel, we represent the foreground or background by using the categories (1 or 0) at pixel-level.
+
+
+# Q&A
+1. Q:How to open '*.gw' files?
+https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation/blob/1278a1f20dd52ca14480a808c849666f6f28afa3/Source/dataloader.py#L118
