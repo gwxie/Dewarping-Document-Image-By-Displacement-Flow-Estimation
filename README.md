@@ -4,7 +4,7 @@ Dewarping Document Image By Displacement Flow Estimation with Fully Convolutiona
 
 See [“paper”](https://arxiv.org/abs/2104.06815) for more information.
 
-download [“result”](https://drive.google.com/drive/folders/1sG0zi1Y0DQSg0VGeo-c_wKU1TVgcvNHp?usp=sharing).
+Download [“rectified images”](https://drive.google.com/drive/folders/1sG0zi1Y0DQSg0VGeo-c_wKU1TVgcvNHp?usp=sharing).
 
 # Dewarping Process
 ![image](https://github.com/gwxie/Dewarping-Document-Image-By-Displacement-Flow-Estimation/blob/main/rectitify_image.jpg)
@@ -31,7 +31,7 @@ image, and mapped the foreground pixels to rectified image by interpolation acco
 # Release Code
 The source code is open, please download from Source. 
 
-Please send an email to xieguowang2018@ia.ac.cn.
+Please send an email to gwxie@outlook.com.
 
 # Running
 1、Download model parameter and source codes 
